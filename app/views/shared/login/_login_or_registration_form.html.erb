@@ -7,6 +7,11 @@
   <div class="login">
     <%= form_for(@user, url: (controller_name == "users" ? signup_path : login_path)) do |f| %>
 
+      <% if controller_name == "users"%>
+        <div class="form-group">
+          <%= f.text_field :name, autofocus: true,class: "form-control", placeholder: "请输入昵称" %>
+        </div>
+      <%end%>
 
       <div class="form-group">
         <%= f.text_field :account, autofocus: true,class: "form-control", placeholder: "请输入昵称,邮箱或者手机号" %>

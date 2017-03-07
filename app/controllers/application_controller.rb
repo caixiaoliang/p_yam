@@ -11,8 +11,8 @@ class ApplicationController < ActionController::Base
 
   def account_type(account)
     return nil unless account.present?
-    return 'email' if account ~= Patterns.email
-    return 'mobile' if account ~= Patterns.mobile
+    return 'email' if account =~ Patterns.email
+    return 'mobile' if account =~ Patterns.mobile
     return 'name'
   end
 end

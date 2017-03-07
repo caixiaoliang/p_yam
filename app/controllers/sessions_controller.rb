@@ -4,9 +4,9 @@ class SessionsController < ApplicationController
   end
 
   def create
-    user = User.find_by_account(params[:user][:account])
-    if user && user.authenicate(params[:user][:password])
-      if account_type(params[:user][:account])=="email" 
+    user = User.find_by_account(user_params[:account])
+    if user && user.authenicate(user_params[:password])
+      if account_type(user_params[:account]) == "email" 
         if user.activated?
           log_in(user)
           redirect_back_or user
@@ -21,4 +21,9 @@ class SessionsController < ApplicationController
     else
     end
   end
+
+  private
+    def user_params
+      params.require(:user).permit(:account,:name,:email,:phone,:password,:password_confirmation,:verify_code)
+    end
 end

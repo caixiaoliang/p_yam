@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   get 'login' => 'sessions#new'
   post 'login' => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
-
+  get 'account_activation/:id',to: 'users#account_activation',as: :user_account_activation
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

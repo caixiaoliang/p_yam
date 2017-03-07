@@ -1,21 +1,34 @@
 class User < ActiveRecord::Base
   # validates :email,pr
-  attr_accessor :account,:password,:verify_code,:email_activation_token,:remember_token
+  attr_accessor :account,:verify_code,:email_activation_token,:remember_token
   # befor_save 
   validates_uniqueness_of :mobile
   validates :account, presence: true
-  validates :email, format: {with: Patterns.email}
-  validates :mobile, format: {with: Patterns.mobile}
+  validates :email, format: {with: Patterns.email},presence: true,:if => lambda{|u| u.email.present?}
+  validates :mobile, format: {with: Patterns.mobile},presence: true,if: lambda{|u| u.mobile.present?}
+
   validates :password, presence: true,length: {minimum: 6}
 
   validate :check_very_code
+ 
+  validates_uniqueness_of :name
 
 
+  has_secure_password
+
+  before_create :create_activation_digest
 #  after_sig_in sign_in_count++
 
-  def check_very_code
-    if 
+
+  def create_activation_digest
+    self.email_activation_token =  User.new_token
+    self.email_activation_digest = User.digest(email_activation_token)
   end
+
+  def check_very_code
+
+  end
+
 
   def send_active_email
 
@@ -34,6 +47,24 @@ class User < ActiveRecord::Base
 
   def clear_remember_digest
       update_attribute(remember_digest: nil)
+  end
+
+  def activated_by_email?
+    email_verified
+  end
+
+
+  def activate(activation_mode)
+    default_activations = [:email, :mobile]
+
+    if default_activations.include?(activation_mode)
+      method_name = "#{activation_mode}_verified"
+      send(update_attribute,method_name,true) if respond_to?(method_name)
+      # update_attribute(:email_verified, true)
+      update_attribute(:activated_at, Time.now)
+    else
+      return nil
+    end
   end
 
 
