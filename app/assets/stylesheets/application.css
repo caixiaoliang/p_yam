@@ -15,6 +15,7 @@
  *= require font-awesome.min
  *= require_self
  */
+
 body{
   background-color: #F1F1F1;
 }
@@ -85,10 +86,10 @@ display: block;
 .carousel-inner img{
   width: 100%;
 }
-/*login*/
+
+
 #modal-login {
   text-align: center;
-  /*width: 30%;*/
 }
 #modal-login .modal-dialog{
   text-align: center;
@@ -117,7 +118,6 @@ display: block;
 
   margin: 8% auto 0 auto;
   background-color: white;
-  background:;
 }
 
 .login_or_register .active{
@@ -127,7 +127,7 @@ display: block;
   margin: 0 auto;
   width: 80%;
   padding-top: 10%;
-    padding-bottom: 10%;
+  padding-bottom: 10%;
 }
 .login .verify{
   position: relative;

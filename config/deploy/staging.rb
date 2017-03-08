@@ -11,6 +11,8 @@
 
 # role-based syntax
 # ==================
+# set :branch, fetch(:branch, "develop")
+set :branch,        :develop
 
 # Defines a role with one or multiple servers. The primary server in each
 # group is considered to be the first unless any hosts have the primary

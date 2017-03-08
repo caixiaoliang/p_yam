@@ -1,7 +1,6 @@
 # config valid only for current version of Capistrano
 lock "3.7.2"
 
-# set :application, "p_yam"
 # set :repo_url, "https://github.com/caixiaoliang/p_yam"
 
 # Default branch is :master
@@ -31,9 +30,11 @@ lock "3.7.2"
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
-server '106.14.251.102', port: 80, roles: [:web, :app, :db], primary: true
+server '106.14.251.102', roles: [:web, :app, :db], primary: true
 
-set :repo_url,        'https://github.com/caixiaoliang/p_yam'
+set :application, "p_yam"
+
+set :repo_url,        'git@github.com:caixiaoliang/p_yam.git'
 set :application,     'p_yam'
 set :user,            'deploy'
 set :puma_threads,    [4, 16]
@@ -50,7 +51,9 @@ set :puma_state,      "#{shared_path}/tmp/pids/puma.state"
 set :puma_pid,        "#{shared_path}/tmp/pids/puma.pid"
 set :puma_access_log, "#{release_path}/log/puma.error.log"
 set :puma_error_log,  "#{release_path}/log/puma.access.log"
-set :ssh_options,     { forward_agent: true, user: fetch(:user), keys: %w(~/.ssh/id_rsa.pub) }
+# set :ssh_options,     { forward_agent: true, user: fetch(:user), keys: %w(~/.ssh/id_rsa.pub) }
+set :ssh_options,     {user: fetch(:user)}
+
 set :puma_preload_app, true
 set :puma_worker_timeout, nil
 set :puma_init_active_record, true  # Change to false when not using ActiveRecord
@@ -65,18 +68,6 @@ set :puma_init_active_record, true  # Change to false when not using ActiveRecor
 ## Linked Files & Directories (Default None):
 # set :linked_files, %w{config/database.yml}
 # set :linked_dirs,  %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
-
-namespace :puma do
-  desc 'Create Directories for Puma Pids and Socket'
-  task :make_dirs do
-    on roles(:app) do
-      execute "mkdir #{shared_path}/tmp/sockets -p"
-      execute "mkdir #{shared_path}/tmp/pids -p"
-    end
-  end
-
-  before :start, :make_dirs
-end
 
 namespace :deploy do
   desc "Make sure local git is in sync with remote."
@@ -105,11 +96,68 @@ namespace :deploy do
     end
   end
 
+  # desc 'setup application'
+  # task :setup do
+  #   on roles(:app), in: :sequence, wait: 5 do
+  #     # invoke 'puma:restart'
+  #   end
+  # end
+
   before :starting,     :check_revision
   after  :finishing,    :compile_assets
   after  :finishing,    :cleanup
   after  :finishing,    :restart
 end
+
+before "deploy:starting", :db
+after "deploy:finishing","db:symlink"
+
+namespace :db do
+  desc 'Create database yml in shared_path'
+  task :default do
+    db_config = ERB.new <<-EOF
+      base: &base
+        adapter: mysql2
+        encoding: utf8
+        reconnect: false
+        pool: 5
+        socket: /tmp/mysql.sock
+        username: #{user}
+        password: #{password}
+
+      development:
+        database: #{application}_dev
+      test:
+        database: #{application}_test
+
+      production:
+        database: #{application}_prod
+    EOF
+    run "mkdir -p #{shared_path}/config"
+    put db_config.result, "#{shared_path}/config/database.yml"
+  end
+
+  desc "Make symlink for database yml"
+  task :symlink do
+    run "ln -nfs #{shared_path}/config/database.yml
+      #{release_path}/config/database.yml"
+  end
+end
+
+namespace :puma do
+  desc 'Create Directories for Puma Pids and Socket'
+  task :make_dirs do
+    on roles(:app) do
+      execute "mkdir #{shared_path}/tmp/sockets -p"
+      execute "mkdir #{shared_path}/tmp/pids -p"
+    end
+  end
+
+  before :start, :make_dirs
+end
+
+
+
 
 # ps aux | grep puma    # Get puma pid
 # kill -s SIGUSR2 pid   # Restart puma

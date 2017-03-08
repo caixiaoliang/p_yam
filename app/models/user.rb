@@ -30,6 +30,9 @@ class User < ActiveRecord::Base
   end
 
 
+  
+
+
   def send_active_email
 
   end
