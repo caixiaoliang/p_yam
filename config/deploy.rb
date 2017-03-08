@@ -57,7 +57,7 @@ set :ssh_options,     {user: fetch(:user)}
 set :puma_preload_app, true
 set :puma_worker_timeout, nil
 set :puma_init_active_record, true  # Change to false when not using ActiveRecord
-
+set :password, "xiaoliang"
 ## Defaults:
 # set :scm,           :git
 # set :branch,        :master
@@ -69,85 +69,96 @@ set :puma_init_active_record, true  # Change to false when not using ActiveRecor
 # set :linked_files, %w{config/database.yml}
 # set :linked_dirs,  %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
+# before "deploy:starting",     :check_revision
+before "deploy:migrate",     "db:default"
+before "deploy:migrate",     "db:symlink"
+after  "deploy:finishing",    :compile_assets
+after  "deploy:finishing",    :cleanup
+# after  "deploy:finishing",    :restart
+
 namespace :deploy do
   desc "Make sure local git is in sync with remote."
   task :check_revision do
-    on roles(:app) do
+    puts "in check_revision xxxxx"
       unless `git rev-parse HEAD` == `git rev-parse origin/master`
         puts "WARNING: HEAD is not the same as origin/master"
         puts "Run `git push` to sync changes."
         exit
       end
-    end
   end
 
-  desc 'Initial Deploy'
-  task :initial do
-    on roles(:app) do
-      before 'deploy:restart', 'puma:start'
-      invoke 'deploy'
-    end
-  end
+  # desc 'Initial Deploy'
+  # task :initial do
+  #   on roles(:app) do
+  #     before 'deploy:restart', 'puma:start'
+  #     invoke 'deploy'
+  #   end
+  # end
 
   desc 'Restart application'
   task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
+    on roles(:web), in: :sequence, wait: 5 do
+      puts "in restart"
       invoke 'puma:restart'
     end
   end
 
-  # desc 'setup application'
-  # task :setup do
-  #   on roles(:app), in: :sequence, wait: 5 do
-  #     # invoke 'puma:restart'
-  #   end
-  # end
-
-  before :starting,     :check_revision
-  after  :finishing,    :compile_assets
-  after  :finishing,    :cleanup
-  after  :finishing,    :restart
 end
-
-before "deploy:starting", :db
-after "deploy:finishing","db:symlink"
 
 namespace :db do
   desc 'Create database yml in shared_path'
   task :default do
-    db_config = ERB.new <<-EOF
-      base: &base
-        adapter: mysql2
-        encoding: utf8
-        reconnect: false
-        pool: 5
-        socket: /tmp/mysql.sock
-        username: #{user}
-        password: #{password}
+    on roles(:web) do
+      # puts "start generate database.yml xxxxxxxxx"
+      # db_config = ERB.new <<-EOF
+      #   base: &base
+      #     host: localhost
+      #     adapter: mysql2
+      #     encoding: utf8
+      #     reconnect: false
+      #     pool: 5
+      #     socket: #{release_path}/tmp/mysql.sock
+      #     username: #{fetch(:user)}
+      #     password: xiaoliang
 
-      development:
-        database: #{application}_dev
-      test:
-        database: #{application}_test
+      #   development:
+      #     database: #{fetch(:application)}_dev
+      #     <<: *base
+      #   test:
+      #     database: #{fetch(:application)}_test
+      #     <<: *base
 
-      production:
-        database: #{application}_prod
-    EOF
-    run "mkdir -p #{shared_path}/config"
-    put db_config.result, "#{shared_path}/config/database.yml"
+      #   production:
+      #     database: #{fetch(:application)}_prod
+      #     <<: *base
+
+      # EOF
+      
+      # p (a = db_config.result.gsub("\n","\\n"))
+      execute "mkdir -p #{shared_path}/config"
+      # execute "cd /home/deploy/apps/p_yam/shared/config/"
+      # execute "echo  -e '#{a}' >> #{shared_path}/config/database.yml"
+      execute "cp #{shared_path}/config/database.yml  #{release_path}/config/database.yml"
+
+      # puts(db_config.result, "#{shared_path}/config/database.yml")
+      execute "cat #{shared_path}/config/database.yml"
+      puts "generate database.yml successfully"
+    end
   end
 
   desc "Make symlink for database yml"
   task :symlink do
-    run "ln -nfs #{shared_path}/config/database.yml
-      #{release_path}/config/database.yml"
+    on roles(:web) do
+      puts "enter in symlink"
+      # execute "ln -fs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+    end
   end
 end
 
 namespace :puma do
   desc 'Create Directories for Puma Pids and Socket'
   task :make_dirs do
-    on roles(:app) do
+    on roles(:web) do
       execute "mkdir #{shared_path}/tmp/sockets -p"
       execute "mkdir #{shared_path}/tmp/pids -p"
     end
