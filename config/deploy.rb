@@ -69,78 +69,45 @@ set :password, "xiaoliang"
 # set :linked_files, %w{config/database.yml}
 # set :linked_dirs,  %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
-# before "deploy:starting",     :check_revision
 before "deploy:migrate",     "db:default"
-before "deploy:migrate",     "db:symlink"
 after  "deploy:finishing",    :compile_assets
 after  "deploy:finishing",    :cleanup
-# after  "deploy:finishing",    :restart
-
-namespace :deploy do
-  desc "Make sure local git is in sync with remote."
-  task :check_revision do
-    puts "in check_revision xxxxx"
-      unless `git rev-parse HEAD` == `git rev-parse origin/master`
-        puts "WARNING: HEAD is not the same as origin/master"
-        puts "Run `git push` to sync changes."
-        exit
-      end
-  end
-
-  # desc 'Initial Deploy'
-  # task :initial do
-  #   on roles(:app) do
-  #     before 'deploy:restart', 'puma:start'
-  #     invoke 'deploy'
-  #   end
-  # end
-
-  desc 'Restart application'
-  task :restart do
-    on roles(:web), in: :sequence, wait: 5 do
-      puts "in restart"
-      invoke 'puma:restart'
-    end
-  end
-
-end
 
 namespace :db do
   desc 'Create database yml in shared_path'
   task :default do
     on roles(:web) do
-      # puts "start generate database.yml xxxxxxxxx"
-      # db_config = ERB.new <<-EOF
-      #   base: &base
-      #     host: localhost
-      #     adapter: mysql2
-      #     encoding: utf8
-      #     reconnect: false
-      #     pool: 5
-      #     socket: #{release_path}/tmp/mysql.sock
-      #     username: #{fetch(:user)}
-      #     password: xiaoliang
+      puts "start generate database.yml xxxxxxxxx"
+      db_config = ERB.new <<-EOF
+        base: &base
+          host: localhost
+          adapter: mysql2
+          encoding: utf8
+          reconnect: false
+          pool: 5
+          username: #{fetch(:user)}
+          password: xiaoliang
 
-      #   development:
-      #     database: #{fetch(:application)}_dev
-      #     <<: *base
-      #   test:
-      #     database: #{fetch(:application)}_test
-      #     <<: *base
+        development:
+          database: #{fetch(:application)}_dev
+          <<: *base
+        test:
+          database: #{fetch(:application)}_test
+          <<: *base
 
-      #   production:
-      #     database: #{fetch(:application)}_prod
-      #     <<: *base
+        production:
+          database: #{fetch(:application)}_prod
+          <<: *base
 
-      # EOF
+      EOF
       
-      # p (a = db_config.result.gsub("\n","\\n"))
+      p (a = db_config.result.gsub("\n","\\n"))
       execute "mkdir -p #{shared_path}/config"
-      # execute "cd /home/deploy/apps/p_yam/shared/config/"
-      # execute "echo  -e '#{a}' >> #{shared_path}/config/database.yml"
+      execute "touch /home/deploy/apps/p_yam/shared/config/database_tmp.yml"
+      execute "echo  -e '#{a}' >> #{shared_path}/config/database_tmp.yml"
+      execute "mv #{shared_path}/config/database_tmp.yml #{shared_path}/config/database.yml"
       execute "cp #{shared_path}/config/database.yml  #{release_path}/config/database.yml"
 
-      # puts(db_config.result, "#{shared_path}/config/database.yml")
       execute "cat #{shared_path}/config/database.yml"
       puts "generate database.yml successfully"
     end
@@ -150,7 +117,7 @@ namespace :db do
   task :symlink do
     on roles(:web) do
       puts "enter in symlink"
-      # execute "ln -fs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+      execute "ln -fs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
     end
   end
 end
