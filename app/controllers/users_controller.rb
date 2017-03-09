@@ -10,7 +10,6 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     account = account_type(user_params[:account])
-    binding.pry
     if account == 'mobile'
       @user.mobile_verified = true
       @user.mobile = user_params[:account].to_s
