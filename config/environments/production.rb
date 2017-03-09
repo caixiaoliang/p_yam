@@ -4,7 +4,6 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   # Defaults to:
   config.action_mailer.smtp_settings = {
-    authentication:      :plain,
     user_name:           "root",
     password:            "Kembo2017",
     location: '/usr/sbin/sendmail',
