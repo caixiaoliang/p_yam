@@ -7,7 +7,7 @@ Rails.application.configure do
   domain:               'gmail.com',
   user_name:            'xiaoliangcaig@gmail.com',
   password:             'chengxiyue',
-  authentication:       'plain',
+  authentication:       'login',
   enable_starttls_auto: true  }
   # config.action_mailer.sendmail_settings = {
   #   location: '/usr/sbin/sendmail',
