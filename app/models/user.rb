@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   # validates :email,pr
   attr_accessor :account,:verify_code,:email_activation_token,:remember_token
   # befor_save 
-  validates_uniqueness_of :mobile
+  validates_uniqueness_of :mobile,if: lambda{|u| u.mobile.present?}
   validates :account, presence: true
   validates :email, format: {with: Patterns.email},presence: true,:if => lambda{|u| u.email.present?}
   validates :mobile, format: {with: Patterns.mobile},presence: true,if: lambda{|u| u.mobile.present?}
@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
 
   has_secure_password
 
-  before_create :create_activation_digest
+  # before_create :create_activation_digest
 #  after_sig_in sign_in_count++
 
 
@@ -30,7 +30,7 @@ class User < ActiveRecord::Base
   end
 
 
-  
+
 
 
   def send_active_email
@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
   def authenticated?(attribute, token)
     digest = self.send "#{attribute}_digest"
     return false if digest.nil?
-    Bcrypt::Password.new(digest).is_password?(token)
+    BCrypt::Password.new(digest).is_password?(token)
   end
 
   def clear_remember_digest
@@ -74,9 +74,9 @@ class User < ActiveRecord::Base
 
   class  << self
     def digest(string)
-      cost = ActiveModel::SecurePassword.min_cost ? Bcrypt::Engine::MIN_COST
-       : Bcrypt::Engine.cost
-       Bcrypt::Password.create(string,cost: cost) 
+      cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST
+       : BCrypt::Engine.cost
+       BCrypt::Password.create(string,cost: cost) 
     end
 
     def new_token

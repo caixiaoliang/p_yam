@@ -10,6 +10,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     account = account_type(user_params[:account])
+    binding.pry
     if account == 'mobile'
       @user.mobile_verified = true
       @user.mobile = user_params[:account].to_s
@@ -20,11 +21,13 @@ class UsersController < ApplicationController
 
     if @user.save
       if account  == 'email'
+        @user.create_activation_digest
         UserMailer.account_activation(@user).deliver_now
         flash[:info] = "please check your email to activate your account"
         redirect_to root_url
+      else
+        redirect_back_or @user
       end
-      redirect_back_or @user
     else
       render "new"
     end
