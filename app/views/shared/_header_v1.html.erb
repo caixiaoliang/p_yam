@@ -1,7 +1,7 @@
 <div class="row headerv1">
   <div class="container">
     <div class="col-md-3 col-sm-3 col-xs-3" >
-      <img  class="logo" src="http://yamaha.com.cn/assets/logo_yamaha-f2cf48eec4b4595c30ca169ce5eb938a.gif">
+      <%= image_tag("http://yamaha.com.cn/assets/logo_yamaha-f2cf48eec4b4595c30ca169ce5eb938a.gif",class: "logo")%>
     </div>
 
     <div class="col-md-6 col-sm-6 col-xs-6">
@@ -30,23 +30,24 @@
           <li><a href="#">Another action</a></li>
           <li><a href="#">Something else here</a></li>
           <li role="separator" class="divider"></li>
-          <li><a href="#">Separated link</a></li>
+          <li><%=link_to "退出",logout_path,method: :delete%></li>
         </ul>
       </div>
       <div class="pull-right">
-        <!-- <a href="" style="line-height:40px;vertical-align:middle;" data-toggle="modal" data-target="#modal-login">登陆／注册</a> -->
-        <span>
-          <%= link_to "登陆",login_path,style: "line-height:40px;vertical-align:middle;"%>
-          <%= link_to "注册",signup_path,style: "line-height:40px;vertical-align:middle;"%>
-        </span>
+        <%if current_user%>
+          <span style="line-height:40px;vertical-align:middle;"><%= link_to current_user.name, current_user%></span>
+        <%else%>
+          <span style="line-height:40px;vertical-align:middle;">
+            <%= link_to "登陆",login_path%>
+            <%= link_to "注册",signup_path%>
+          </span>
+        <%end%>
         <a href="" style="line-height:40px;vertical-align:middle;" data-toggle="modal" data-target="#modal-login"></a>
       </div>
     </div>
   </div>
 
   <ul class="home-nav">
-    
-
     <li class="active"><a href="">产品</a></li>
     <li><a href="">音乐</a></li>
     <li><a href="">销售网络</a></li>

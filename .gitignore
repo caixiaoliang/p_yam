@@ -38,3 +38,4 @@ dump.rdb
 /storage
 
 /certificates
+sendgrid.env

@@ -6,27 +6,24 @@ class User < ActiveRecord::Base
   validates :account, presence: true
   validates :email, format: {with: Patterns.email},presence: true,:if => lambda{|u| u.email.present?}
   validates :mobile, format: {with: Patterns.mobile},presence: true,if: lambda{|u| u.mobile.present?}
-
   validates :password, presence: true,length: {minimum: 6}
-
-  validate :check_very_code
- 
+  validate :check_verify_code
+  validates :name,presence: true
   validates_uniqueness_of :name
-
-
+  validates_uniqueness_of :email, if: lambda{|u| u.email.present?}
+  validates_uniqueness_of :mobile, if: lambda{|u| u.mobile.present?}
+  validates_confirmation_of :password
   has_secure_password
 
   # before_create :create_activation_digest
-#  after_sig_in sign_in_count++
-
+  # after_sig_in sign_in_count++
 
   def create_activation_digest
     self.email_activation_token =  User.new_token
     self.email_activation_digest = User.digest(email_activation_token)
   end
 
-  def check_very_code
-
+  def check_verify_code
   end
 
 
@@ -49,7 +46,7 @@ class User < ActiveRecord::Base
   end
 
   def clear_remember_digest
-      update_attribute(remember_digest: nil)
+      update_attribute(:remember_digest, nil)
   end
 
   def activated_by_email?
@@ -61,8 +58,8 @@ class User < ActiveRecord::Base
     default_activations = [:email, :mobile]
 
     if default_activations.include?(activation_mode)
-      method_name = "#{activation_mode}_verified"
-      send(update_attribute,method_name,true) if respond_to?(method_name)
+      field_name = "#{activation_mode}_verified"
+      send(:update_attribute, field_name,true) if respond_to?(field_name)
       # update_attribute(:email_verified, true)
       update_attribute(:activated_at, Time.now)
     else
@@ -83,9 +80,17 @@ class User < ActiveRecord::Base
       SecureRandom.urlsafe_base64
     end
 
+    def account_type(account)
+      return nil unless account.present?
+      return 'email' if account =~ Patterns.email
+      return 'mobile' if account =~ Patterns.mobile
+      return 'name'
+    end
+
     def find_by_account(val)
+
       account = account_type(val)
-      send("find_by_#{account}") 
+      send("find_by_#{account}",val) 
     end
 
   end

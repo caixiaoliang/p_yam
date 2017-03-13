@@ -34,8 +34,10 @@ gem 'bcrypt', '~> 3.1.7'
 # Use Unicorn as the app server
 # gem 'unicorn'
 gem 'puma'
-
+gem 'china_sms'
 # Use Capistrano for deployment
+# gem 'sendgrid-ruby'
+gem  'rest_client'
 
 # gem 'capistrano-rails', group: :development
 group :development, :test do
@@ -48,6 +50,7 @@ group :development, :test do
   gem 'capistrano-rails',   require: false
   gem 'capistrano-bundler', require: false
   gem 'capistrano3-puma',   require: false
+  # gem "letter_opener"
   # gem 'capistrano3-puma', github: "seuros/capistrano-puma"
 end
 
