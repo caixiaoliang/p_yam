@@ -1,13 +1,14 @@
 class User < ActiveRecord::Base
   # validates :email,pr
-  attr_accessor :account,:verify_code,:email_activation_token,:remember_token
+  attr_accessor :account,:verify_code,:email_activation_token,:remember_token,
+        :system_verify_data
   # befor_save 
   validates_uniqueness_of :mobile,if: lambda{|u| u.mobile.present?}
   validates :account, presence: true
   validates :email, format: {with: Patterns.email},presence: true,:if => lambda{|u| u.email.present?}
   validates :mobile, format: {with: Patterns.mobile},presence: true,if: lambda{|u| u.mobile.present?}
   validates :password, presence: true,length: {minimum: 6}
-  validate :check_verify_code
+  validate :check_verify_code, if: lambda{|u| u.mobile.present?},on: :create
   validates :name,presence: true
   validates_uniqueness_of :name
   validates_uniqueness_of :email, if: lambda{|u| u.email.present?}
@@ -18,20 +19,20 @@ class User < ActiveRecord::Base
   # before_create :create_activation_digest
   # after_sig_in sign_in_count++
 
+
   def create_activation_digest
     self.email_activation_token =  User.new_token
     self.email_activation_digest = User.digest(email_activation_token)
   end
-
+  
+  #不为空 
   def check_verify_code
-  end
-
-
-
-
-
-  def send_active_email
-
+    binding.pry
+    effective_time = 10.minute
+    hash = self.system_verify_data.symbolize_keys!
+    # {account: mobile,verify_code: code, sent_at: Time.now}
+    slef.errors.add(:verify_code,"验证码不能为空") unless hash[:verify_code].present?
+    slef.errors.add(:verify_code,"验证码错误或过期") if (hash[:sent_at].to_time + effective_time) < Time.now && self.verify_code != hash[:verify_code]
   end
 
   def set_new_remember_digest
@@ -39,6 +40,7 @@ class User < ActiveRecord::Base
     update_attribute(remember_digest: User.digest(remember_token))
   end
 
+  # 
   def authenticated?(attribute, token)
     digest = self.send "#{attribute}_digest"
     return false if digest.nil?
@@ -88,7 +90,6 @@ class User < ActiveRecord::Base
     end
 
     def find_by_account(val)
-
       account = account_type(val)
       send("find_by_#{account}",val) 
     end

@@ -5,22 +5,22 @@
     <%= link_to "注册", signup_path,class: "#{controller_name=='sessions' ? '' : 'active'}"%>
   </div>
   <div class="login">
-
-    <%= form_for(@user, url: (controller_name == "users" ? signup_path : login_path)) do |f| %>
+  <%puts "controller_name:  #{controller_name}"%>
+    <%= form_for(@user, url: (controller_name == "users" ? signup_path : login_path), method: :post) do |f| %>
 
       <% if controller_name == "users"%>
         <div class="form-group">
           <%= f.text_field :name, autofocus: true,class: "form-control", placeholder: "请输入昵称" %>
         </div>
-        <div><%=@user.errors[:name][0]%></div>
+        <div><%= @user.errors[:name][0]%></div>
       <%end%>
 
       <div class="form-group">
-        <%= f.text_field :account, autofocus: true,class: "form-control  account", placeholder: "请输入邮箱或者手机号" %>
+        <%= f.text_field :account, autofocus: true,class: "form-control  account",id: "account",autocomplete: "off", placeholder: "请输入邮箱或者手机号" %>
       </div>
-      <div><%=@user.errors[:account][0].to_s%></div>
-      <div><%=@user.errors[:email][0].to_s%></div>
-      <div><%=@user.errors[:mobile][0].to_s%></div>
+      <div><%= @user.errors[:account][0].to_s%></div>
+      <div><%= @user.errors[:email][0].to_s%></div>
+      <div><%= @user.errors[:mobile][0].to_s%></div>
 
       <div class="form-group">
 
@@ -30,27 +30,26 @@
         <%= f.password_field :password, autocomplete: "off",class: "form-control",placeholder: "请输入密码" %>
         <div><%=@user.errors[:password][0]%></div>
       </div>
-
+      <div class="form-group">
+        <%= f.password_field :password_confirmation, autocomplete: "off",class: "form-control",placeholder: "请再次输入密码" if controller_name == "users" %>
+      </div>
+      <div id="captcha" class=" form-group ">
+        <%= rucaptcha_input_tag(class: 'form-control',placeholder: "输入验证码")%>
+        <%= rucaptcha_image_tag(alt: '验证码，点击刷新')%>
+        <div class=""><%=@user.errors[:base][0]%></div>
+      </div>
       <%if controller_name == "users"%>
-        <div class="form-group">
-          <%= f.password_field :password_confirmation, autocomplete: "off",class: "form-control",placeholder: "请再次输入密码"%>
-        </div>
 
-        <div class="form-group verify">
+        <div class="form-group sms  hidden">
           <%= f.text_field :verify_code, class: "form-control",placeholder: "短信验证码"%>
-          <%= link_to "点击获取", "javascript:void(0);",class: "js-send-sms  send_sms js-login", id: "send-sms"%>
+          <%= link_to "点击获取", "javascript:void(0);", id: "send-sms"%>
         </div>
-        <div id="gt_captcha" class="captcha">
-          <script type="text/javascript" src="http://api.geetest.com/get.php?gt=f4b1eefeb6dd69b32c38da3aaa8bb318"></script>
-        </div>
-
       <%end%>
 
       <div class="submit">
         <%= f.submit "#{controller_name == 'users' ? '注册' : '登陆'}",class: "btn btn-success btn-block" %>
       </div>
     <% end %>
-    <!-- <%#= render "devise/shared/links" %> -->
   </div>
       
 </div>

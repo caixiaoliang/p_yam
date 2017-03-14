@@ -1,12 +1,15 @@
 class SessionsController < ApplicationController
   def new
-    redirect_back_or(current_user) if current_user
+    redirect_to(root_url) if current_user
     @user = User.new
   end
 
   def create
+
     @user = User.find_by_account(user_params[:account])
-    if @user && @user.authenticate(user_params[:password])
+     valid_rucaptcha =  verify_rucaptcha?
+    if @user && valid_rucaptcha && @user.authenticate(user_params[:password])
+
       if account_type(user_params[:account]) == "email" 
         if @user.activated_by_email?
           log_in(@user)
@@ -21,18 +24,26 @@ class SessionsController < ApplicationController
         redirect_to root_url
       end
     else
-      flash.now[:message] = "密码错误"
+      if !@user.authenticate(user_params[:password])
+        @user.errors.add(:password, "密码错误")
+      end
+      if !valid_rucaptcha
+        @user.errors.add(:base,"验证码错误")
+        # flash.now[:danger] = "验证码错误" 
+      end
       render "new"
     end
   end
 
   def destroy
     log_out
-    redirect_to root_path
+    flash[:message] = "退出成功"
+    redirect_to root_url
   end
 
   private
     def user_params
-      params.require(:user).permit(:account,:name,:email,:phone,:password,:password_confirmation,:verify_code)
+      params.require(:user).permit(:account,:_rucaptcha,:name,:email,:phone,:password,:password_confirmation,:verify_code)
     end
+
 end

@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
+
   root 'home#index'
   resources :sessions
   resources :users
@@ -18,6 +19,7 @@ Rails.application.routes.draw do
   delete 'logout' => 'sessions#destroy'
   get 'account_activation/:id',to: 'users#account_activation',as: :user_account_activation
 
+  post 'users/send_verify_code' => 'users#send_verify_code'
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

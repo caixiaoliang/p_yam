@@ -110,9 +110,7 @@ display: block;
 #send-sms{
   text-decoration: none;
 }
-#modal-login #send-sms{
-  
-}
+
 .login_or_register{
   width: 50%;
 
@@ -129,11 +127,10 @@ display: block;
   padding-top: 10%;
   padding-bottom: 10%;
 }
-.login .verify{
+.login .sms{
   position: relative;
 }
 .login #send-sms{
-  height: 100%;
   position: absolute;
   right: 0;
   top: 0;

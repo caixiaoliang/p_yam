@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170305092400) do
+ActiveRecord::Schema.define(version: 20170314105731) do
 
   create_table "ar_internal_metadata", primary_key: "key", force: :cascade do |t|
     t.string   "value",      limit: 255
@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20170305092400) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                   limit: 255,                 null: false
+    t.string   "email",                   limit: 255
     t.string   "email_activation_digest", limit: 255
     t.boolean  "email_verified",                      default: false
     t.string   "password_digest",         limit: 255,                 null: false
