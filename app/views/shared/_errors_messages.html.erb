@@ -4,7 +4,7 @@
       表单中有<%= user.errors.count%>个错误
     </div>
     <ul>
-    <%binding.pry%>
+
       <%user.errors.full_messages.each do |msg|%>
 
         <li><%=msg%></li>

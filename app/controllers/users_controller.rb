@@ -9,7 +9,6 @@ class UsersController < ApplicationController
 
 # 注册
   def create
-    binding.pry
     @user = User.new(user_params)
     account = account_type(user_params[:account])
     valid_rucaptcha =  verify_rucaptcha?(@user)
@@ -25,12 +24,13 @@ class UsersController < ApplicationController
 
     if valid_rucaptcha && @user.save
       if account  == 'email'
-        send_active_email(@user)
+        @user.send_active_email
         flash[:info] = " 请登录到邮箱激活帐户"
         redirect_to root_url
       else
         log_in(@user)
         Sms.clear_limit(mobile)
+        clear_verify_data
         flash[:message] = "注册成功"
         redirect_to @user
       end
@@ -45,9 +45,9 @@ class UsersController < ApplicationController
 
 
   def account_activation
-    user = User.find_by_email(params[:email])
-    binding.pry
-    if user && !user.activated_by_email? && user.authenticated?(:email_activation, params[:id])
+    user = User.find_by_account(params[:account])
+
+    if user && !user.is_verified_with?(:email) && user.authenticated?(:email_activation, params[:id])
 
       user.activate(:email)
       log_in(user)
@@ -63,15 +63,18 @@ class UsersController < ApplicationController
 
   end
 
+  # 找回密码时传入的env为reset_password
+  # 注册邮箱时传入的env为reg
   def send_verify_code
-    #   验证码有效时间
     mobile = params[:account]
+    key = "sms_#{params[:env]}".to_sym
     if mobile =~ Patterns.mobile
-      return render json: {code: 404,msg: "fail"} if User.find_by_mobile(params[:account])
+      # 如果是找回密码时则判断该手机用户存在否
+      return render json: {code: 404,msg: "fail"} if key == :sms_reset_password && !User.find_by_mobile(params[:account])
       return render json: {code: 403,msg: "forbidden"} if Sms.is_limited?(mobile)
       code = Sms.random_code
       Sms.send_verify_code(mobile,code)
-      session[:sms_reg] = {account: mobile,verify_code: code, sent_at: Time.now}
+      session[key] = {account: mobile,verify_code: code, sent_at: Time.now}
       render json: {code: 200,msg: "sent"}
     else
       render json: {code: 404,msg: "fail"}

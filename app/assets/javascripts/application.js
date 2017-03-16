@@ -43,12 +43,14 @@
   //     }
   // });
  $(function(){
-   $("#send-sms").on("click",function(){
+   $(".js-send-sms").on("click",function(){
+      var sendBtn = $(".send-sms")
       $.ajax({
         url: "/users/send_verify_code",
         type: "post",
         dataType: "json",
         data:{
+          env: sendBtn.data("env"),
           account: $("#account").val()
         },
         success: function(data){

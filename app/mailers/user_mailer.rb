@@ -49,7 +49,18 @@ class UserMailer < ActionMailer::Base
 
 
 
-
+  def password_reset(user)
+    @user = user
+    email_body = render "password_reset"
+    uri = URI("http://api.sendcloud.net/apiv2/mail/send")
+    Net::HTTP.post_form(uri, {:apiUser => 'chengxiyue_test_Dv1H4N', 
+      :apiKey => 'Sp8BSU0DV8XM1gUJ',
+      :from => "yamahainfo@yamaha.com",
+      :fromName => "Yamaha",
+      :to => user.email,
+      :subject => "密码重置",
+      :html => email_body})
+  end
 
 
 

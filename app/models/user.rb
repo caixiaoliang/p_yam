@@ -1,24 +1,44 @@
 class User < ActiveRecord::Base
-  # validates :email,pr
+
   attr_accessor :account,:verify_code,:email_activation_token,:remember_token,
-        :system_verify_data
-  # befor_save 
+        :system_verify_data, :reset_token
   validates_uniqueness_of :mobile,if: lambda{|u| u.mobile.present?}
-  validates :account, presence: true
   validates :email, format: {with: Patterns.email},presence: true,:if => lambda{|u| u.email.present?}
   validates :mobile, format: {with: Patterns.mobile},presence: true,if: lambda{|u| u.mobile.present?}
   validates :password, presence: true,length: {minimum: 6}
   validate :check_verify_code, if: lambda{|u| u.mobile.present?},on: :create
-  validates :name,presence: true
+  validates :name, presence: true
+  validate :check_presence_of_account
   validates_uniqueness_of :name
   validates_uniqueness_of :email, if: lambda{|u| u.email.present?}
   validates_uniqueness_of :mobile, if: lambda{|u| u.mobile.present?}
   validates_confirmation_of :password
   has_secure_password
 
-  # before_create :create_activation_digest
-  # after_sig_in sign_in_count++
+  def check_presence_of_account
+    if(!self.account.present?) && !(self.mobile.present? || self.email.present?)
+      self.errors.add(:account,"帐号不能为空")
+    end
+  end
 
+  def is_verified_with?(val)
+    raise "invalid param" unless [:email, :mobile].include?(val)
+    return self.send "#{val}_verified"
+  end
+
+  def create_reset_digest
+    self.reset_token = User.new_token
+    update_attribute(:reset_digest, User.digest(reset_token))
+    update_attribute(:reset_sent_at, Time.now)
+  end
+
+  def send_password_reset_email
+    UserMailer.password_reset(self).deliver_now
+  end
+
+  def send_active_email
+    UserMailer.account_activation(self).deliver_now
+  end
 
   def create_activation_digest
     self.email_activation_token =  User.new_token
@@ -27,12 +47,16 @@ class User < ActiveRecord::Base
   
   #不为空 
   def check_verify_code
-    binding.pry
     effective_time = 10.minute
     hash = self.system_verify_data.symbolize_keys!
-    # {account: mobile,verify_code: code, sent_at: Time.now}
-    slef.errors.add(:verify_code,"验证码不能为空") unless hash[:verify_code].present?
-    slef.errors.add(:verify_code,"验证码错误或过期") if (hash[:sent_at].to_time + effective_time) < Time.now && self.verify_code != hash[:verify_code]
+    slef.errors.add(:verify_code,"验证码不合法") if verify_code_invalid?
+
+  end
+
+  def verify_code_invalid?
+    effective_time = 10.minute
+    hash = self.system_verify_data.symbolize_keys!
+    hash[:verify_code].blank? || (hash[:sent_at].to_time + effective_time) < Time.now && (self.verify_code != hash[:verify_code])
   end
 
   def set_new_remember_digest
@@ -51,11 +75,6 @@ class User < ActiveRecord::Base
       update_attribute(:remember_digest, nil)
   end
 
-  def activated_by_email?
-    email_verified
-  end
-
-
   def activate(activation_mode)
     default_activations = [:email, :mobile]
 
@@ -67,6 +86,10 @@ class User < ActiveRecord::Base
     else
       return nil
     end
+  end
+
+  def password_reset_expired?
+    reset_sent_at < 2.hours.ago
   end
 
 

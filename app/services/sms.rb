@@ -7,7 +7,7 @@ module Sms
     raise "content can't be blank" if content.blank?
     raise "#{sms_service_provider} is not supplied"  unless [:tui3, :yunpian, :smsbao, :chanyoo, :emay, :luosimao].include?(sms_service_provider)
     ChinaSMS.use(sms_service_provider, password: '5fcc0e93908fb5e99ae70349d20e4451')
-    ChinaSMS.to(mobile, content)
+    ChinaSMS.to(mobile, content) unless Rails.env.development?
     # ChinaSMS.use :smsbao, username: Setting.sms_bao.username, password: Setting.sms_bao.password
   end
 

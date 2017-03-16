@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   root 'home#index'
   resources :sessions
   resources :users
-
+  resources :password_resets
 
   #注册 
   get 'signup' => 'users#new'

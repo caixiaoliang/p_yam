@@ -7,11 +7,11 @@ class SessionsController < ApplicationController
   def create
 
     @user = User.find_by_account(user_params[:account])
-     valid_rucaptcha =  verify_rucaptcha?
+    valid_rucaptcha =  verify_rucaptcha?
     if @user && valid_rucaptcha && @user.authenticate(user_params[:password])
 
       if account_type(user_params[:account]) == "email" 
-        if @user.activated_by_email?
+        if @user.is_verified_with?(:email)
           log_in(@user)
           redirect_to root_url
         else

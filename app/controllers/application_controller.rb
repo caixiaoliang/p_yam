@@ -10,10 +10,6 @@ class ApplicationController < ActionController::Base
   def set_local
   end
 
-  def send_active_email(user)
-    UserMailer.account_activation(user).deliver_now
-  end
-
   def account_type(account)
     return nil unless account.present?
     return 'email' if account =~ Patterns.email

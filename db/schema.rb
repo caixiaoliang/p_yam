@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170314105731) do
+ActiveRecord::Schema.define(version: 20170315024904) do
 
   create_table "ar_internal_metadata", primary_key: "key", force: :cascade do |t|
     t.string   "value",      limit: 255
@@ -34,6 +34,9 @@ ActiveRecord::Schema.define(version: 20170314105731) do
     t.string   "name",                    limit: 255
     t.string   "mobile",                  limit: 255
     t.boolean  "mobile_verified",                     default: false
+    t.string   "reset_digest",            limit: 255
+    t.datetime "reset_sent_at"
+    t.string   "open_id",                 limit: 255
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
