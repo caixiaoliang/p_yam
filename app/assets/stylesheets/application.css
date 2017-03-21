@@ -15,7 +15,16 @@
  *= require font-awesome
  *= require_self
  */
+/*
+ *{
+  border: solid 1px red;
+ }*/
 
+/** {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}*/
 body{
   background-color: #F1F1F1;
 }
@@ -177,6 +186,12 @@ display: block;
   .form-control {
     color: red;
   }
+}*/
+
+
+
+/*.imageBox{
+    width: 600px;
 }*/
 
 

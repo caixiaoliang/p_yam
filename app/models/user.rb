@@ -13,6 +13,9 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email, if: lambda{|u| u.email.present?}
   validates_uniqueness_of :mobile, if: lambda{|u| u.mobile.present?}
   validates_confirmation_of :password
+
+  has_one :profile
+
   has_secure_password
 
   def check_presence_of_account
@@ -24,6 +27,10 @@ class User < ActiveRecord::Base
   def is_verified_with?(val)
     raise "invalid param" unless [:email, :mobile].include?(val)
     return self.send "#{val}_verified"
+  end
+
+  def is_verified?
+    self.email_verified || self.mobile_verified
   end
 
   def create_reset_digest
@@ -90,6 +97,10 @@ class User < ActiveRecord::Base
 
   def password_reset_expired?
     reset_sent_at < 2.hours.ago
+  end
+
+  def avatar
+    profile.try(:avatar)
   end
 
 

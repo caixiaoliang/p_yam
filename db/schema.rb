@@ -11,12 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170315024904) do
+ActiveRecord::Schema.define(version: 20170321052358) do
 
   create_table "ar_internal_metadata", primary_key: "key", force: :cascade do |t|
     t.string   "value",      limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+  end
+
+  create_table "profiles", force: :cascade do |t|
+    t.string   "avatar",      limit: 255
+    t.string   "location",    limit: 255
+    t.string   "gender",      limit: 255
+    t.string   "city",        limit: 255
+    t.text     "description", limit: 65535
+    t.integer  "age",         limit: 4
+    t.integer  "user_id",     limit: 4
+    t.date     "birthday"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   create_table "users", force: :cascade do |t|

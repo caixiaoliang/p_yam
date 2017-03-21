@@ -58,6 +58,13 @@
       <div class="submit">
         <%= f.submit "#{controller_name == 'users' ? '注册' : '登陆'}",class: "btn btn-success btn-block" %>
       </div>
+
+
+      <div>
+        <h4>第三方帐号登录</h4>
+        <a href="/auth/wechat"><i class="fa fa-2x fa-weixin"></i></a>
+      </div>
+
     <% end %>
   </div>
       

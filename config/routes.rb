@@ -9,10 +9,17 @@ Rails.application.routes.draw do
   resources :users
   resources :password_resets
 
+  resources :callbacks do
+    collection do
+      post 'image_upload_callback'
+    end
+  end
+
   #注册 
   get 'signup' => 'users#new'
   post 'signup' => 'users#create'
   
+  get 'sessions/auth_callback' => 'sessions#auth_callback'
   #登入登出 
   get 'login' => 'sessions#new'
   post 'login' => 'sessions#create'

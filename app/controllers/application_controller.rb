@@ -5,9 +5,10 @@ class ApplicationController < ActionController::Base
   # protect_from_forgery with: :exception
   protect_from_forgery
   include SessionsHelper
-
+  include ApplicationHelper
 
   def set_local
+    I18n.locale= params[:locale]||I18n.default_locale
   end
 
   def account_type(account)
@@ -27,4 +28,5 @@ class ApplicationController < ActionController::Base
       return false
     end
   end
+
 end

@@ -22,6 +22,7 @@ class UsersController < ApplicationController
       @user.create_activation_digest
     end
 
+
     if valid_rucaptcha && @user.save
       if account  == 'email'
         @user.send_active_email
@@ -60,7 +61,7 @@ class UsersController < ApplicationController
   end
 
   def show
-
+    @user = User.find(params[:id])
   end
 
   # 找回密码时传入的env为reset_password

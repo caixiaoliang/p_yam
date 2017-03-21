@@ -9,6 +9,11 @@ gem 'mysql2'
 # 国际化
 gem 'i18n'
 
+# 微信开放平台
+gem "omniauth-wechat-oauth2", git: 'git@github.com:yangsr/omniauth-wechat-oauth2.git'
+gem 'responders'
+#微信公众平台 
+# gem 'omniauth-wechat-oauth2'
 # Use SCSS for stylesheets
 gem 'sass'
 gem 'sass-rails', '~> 5.0'
@@ -19,6 +24,11 @@ gem 'uglifier', '>= 1.3.0'
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.1.0'
+
+# 七牛云
+gem 'qiniu','~>6.8.0'
+
+
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
@@ -57,7 +67,7 @@ gem 'redis-objects'
 # Use Capistrano for deployment
 # gem 'sendgrid-ruby'
 
-gem  'rest_client'
+gem  'rest-client'
 
 # gem 'capistrano-rails', group: :development
 group :development, :test do

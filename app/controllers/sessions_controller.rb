@@ -4,6 +4,19 @@ class SessionsController < ApplicationController
     @user = User.new
   end
 
+
+  def auth_callback
+    binding.pry
+    @title = '微信登录 结果页'
+    auth_hash = request.env['omniauth.auth']
+    @info = auth_hash
+
+    openid = auth_hash.fetch('extra').fetch('raw_info').fetch("openid") rescue ''
+    user_info = auth_hash.fetch('extra').fetch('raw_info')
+
+    redirect_to "http://yourserver.cn/#!/login/1"
+  end
+
   def create
 
     @user = User.find_by_account(user_params[:account])
@@ -24,8 +37,10 @@ class SessionsController < ApplicationController
         redirect_to root_url
       end
     else
-      if !@user.authenticate(user_params[:password])
+      if @user && !@user.authenticate(user_params[:password])
         @user.errors.add(:password, "密码错误")
+      else
+        @user.errors.add(:account,"帐户不存在")
       end
       if !valid_rucaptcha
         @user.errors.add(:base,"验证码错误")
