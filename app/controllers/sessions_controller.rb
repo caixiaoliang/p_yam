@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
 
 
   def auth_callback
-    binding.pry
+
     @title = '微信登录 结果页'
     auth_hash = request.env['omniauth.auth']
     @info = auth_hash
@@ -18,7 +18,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    binding.pry
+
     unless user_params[:account].present?
       flash[:danger] = "帐号不能为空"
       return redirect_to login_url

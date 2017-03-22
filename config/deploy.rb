@@ -69,7 +69,8 @@ set :password, "xiaoliang"
 # set :linked_files, %w{config/database.yml}
 # set :linked_dirs,  %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
-before "deploy:migrate",     "db:default"
+before "deploy:assets:precompile", "db:default"
+# before "deploy:migrate",     "db:default"
 after  "deploy:finishing",    :compile_assets
 after  "deploy:finishing",    :cleanup
 
