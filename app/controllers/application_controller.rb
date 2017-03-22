@@ -18,15 +18,4 @@ class ApplicationController < ActionController::Base
     return 'name'
   end
 
-
-  def verify_gt_captcha?(resource=nil)
-    service = GeeTest.new('2fe323104e562daa06eda791634702ed')
-    if service.validate(params[:geetest_challenge], params[:geetest_validate], params[:geetest_seccode])
-      return true
-    else
-      resource.errors.add(:base, "验证码错误") if resource
-      return false
-    end
-  end
-
 end

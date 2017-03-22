@@ -29,7 +29,7 @@
         <ul class="dropdown-menu dropdown-menu-right">
           <li><a href="#">Action</a></li>
           <li><a href="#">Another action</a></li>
-          <li><a href="#">Something else here</a></li>
+          <li> <%=link_to "发布原创",new_article_path if current_user%> </li>
           <li role="separator" class="divider"></li>
           <li><%=link_to("退出",logout_path,method: :delete) if current_user%></li>
         </ul>

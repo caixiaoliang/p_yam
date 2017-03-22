@@ -14,11 +14,15 @@ class SessionsController < ApplicationController
     openid = auth_hash.fetch('extra').fetch('raw_info').fetch("openid") rescue ''
     user_info = auth_hash.fetch('extra').fetch('raw_info')
 
-    redirect_to "http://yourserver.cn/#!/login/1"
+    # redirect_to "http://yourserver.cn/#!/login/1"
   end
 
   def create
-
+    binding.pry
+    unless user_params[:account].present?
+      flash[:danger] = "帐号不能为空"
+      return redirect_to login_url
+    end
     @user = User.find_by_account(user_params[:account])
     valid_rucaptcha =  verify_rucaptcha?
     if @user && valid_rucaptcha && @user.authenticate(user_params[:password])

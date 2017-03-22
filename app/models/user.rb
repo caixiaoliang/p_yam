@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password
 
   has_one :profile
-
+  has_many :articles
   has_secure_password
 
   def check_presence_of_account

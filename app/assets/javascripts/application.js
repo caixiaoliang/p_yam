@@ -12,7 +12,8 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
+//= require kindeditor
+// = require turbolinks
 //= require bootstrap.min 
 //= require cropbox
 //= require_tree .

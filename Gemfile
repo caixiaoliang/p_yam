@@ -63,6 +63,8 @@ gem 'redis-store'
 gem 'redis-rails'
 gem 'redis-objects'
 
+#富文本编辑器(支持视频)
+gem 'rails_kindeditor'
 
 # Use Capistrano for deployment
 # gem 'sendgrid-ruby'

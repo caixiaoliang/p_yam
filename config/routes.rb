@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   resources :sessions
   resources :users
   resources :password_resets
+  resources :articles
+  resources :images
 
   resources :callbacks do
     collection do
