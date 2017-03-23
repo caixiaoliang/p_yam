@@ -12,10 +12,10 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require kindeditor
 // = require turbolinks
 //= require bootstrap.min 
 //= require cropbox
+//= require simditor
 //= require_tree .
  
 
@@ -35,7 +35,7 @@
       });
     });
     var mobile_regx = /^1[0-9]{10}$/
-    $(".account").blur(function(){
+    $(document).on("blur",".account",function(){
       if(mobile_regx.test($(this).val())){
         $(".sms").removeClass("hidden");
       }else

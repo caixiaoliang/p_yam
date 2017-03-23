@@ -13,15 +13,13 @@
         <div class="form-group">
           <%= f.text_field :name, autofocus: true,class: "form-control input-lg", placeholder: "请输入昵称" %>
         </div>
-        <div><%= @user.errors[:name][0]%></div>
+        <div class="error"><%= @user.errors[:name].join(",")%></div>
       <%end%>
 
       <div class="form-group">
         <%= f.text_field :account, autofocus: true,class: "form-control  account input-lg",id: "account",autocomplete: "off", placeholder: "请输入邮箱或者手机号" %>
       </div>
-      <div><%= @user.errors[:account][0].to_s%></div>
-      <div><%= @user.errors[:email][0].to_s%></div>
-      <div><%= @user.errors[:mobile][0].to_s%></div>
+      <div class="error"><%= (@user.errors[:account]+@user.errors[:email]+@user.errors[:mobile]).join(",")%></div>
 
       <div class="form-group">
 
@@ -29,7 +27,7 @@
         <em>(<%= @minimum_password_length %> characters minimum)</em>
         <% end %><br />
         <%= f.password_field :password, autocomplete: "off",class: "form-control input-lg",placeholder: "请输入密码" %>
-        <div><%=@user.errors[:password][0]%></div>
+        <div class="error"><%=@user.errors[:password].join(",")%></div>
         <%= link_to "忘记密码",new_password_reset_path if controller_name == "sessions" %>
       </div>
       <div class="form-group">
@@ -45,13 +43,14 @@
             </a>
           </span>
         </div>
-        <div class=""><%=@user.errors[:base][0]%></div>
+        <div class="error"><%=@user.errors[:base].join(",")%></div>
       </div>
       <%if controller_name == "users"%>
 
         <div class="form-group sms  hidden">
           <%= f.text_field :verify_code, class: "form-control input-lg",placeholder: "短信验证码"%>
           <%= link_to "点击获取", "javascript:void(0);", class: "send-sms js-send-sms",data: {env: "reg"}%>
+          <div class="error"><%=@user.errors[:verify_code].join(",")%></div>
         </div>
       <%end%>
 

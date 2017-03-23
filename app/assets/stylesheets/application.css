@@ -13,6 +13,7 @@
  *= require_tree .
  *= require bootstrap.min
  *= require font-awesome
+ *= require simditor
  *= require_self
  */
 /*
@@ -27,6 +28,9 @@
 }*/
 body{
   background-color: #F1F1F1;
+}
+.error{
+  color: #A94442;
 }
 a{
   text-decoration: none;

@@ -64,6 +64,10 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
+  def destroy
+    
+  end
+
   # 找回密码时传入的env为reset_password
   # 注册邮箱时传入的env为reg
   def send_verify_code

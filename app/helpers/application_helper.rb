@@ -20,6 +20,10 @@ module ApplicationHelper
     
   end
 
+  def image_path(hash)
+    return "http://7xsr0z.com2.z0.glb.clouddn.com/#{hash}"
+  end
+
   def gravatar_for(user,options={width: "100"})
     width = options[:width]
     # 2根据图片在七牛的hash显示图片
@@ -52,7 +56,7 @@ module ApplicationHelper
   end
 
   def qiniu_image_by_hash(hash, opt={})
-    url="http://7xsr0z.com2.z0.glb.clouddn.com/#{hash}"    #为了方便硬编码七牛的域名
+    url = "http://7xsr0z.com2.z0.glb.clouddn.com/#{hash}"    #为了方便硬编码七牛的域名
     format = opt[:format]
     width = opt[:width]
     height = opt[:height]
