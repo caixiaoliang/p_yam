@@ -11,12 +11,19 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery.turbolinks
 //= require jquery_ujs
-// = require turbolinks
+//= require autosave_article
 //= require bootstrap.min 
 //= require cropbox
 //= require simditor
-//= require_tree .
+//= require simditor-autosave
+//= require simditor-fullscreen
+
+//= require turbolinks
+
+
+
  
 
  $(function(){
@@ -43,7 +50,7 @@
         $(".sms").addClass("hidden");
       }
     });
-    $(".account")
+
   })
 
 

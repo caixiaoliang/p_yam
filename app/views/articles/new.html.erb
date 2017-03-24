@@ -1,49 +1,8 @@
 <div class="row">
   <div class="col-md-9 col-sm-10 col-sm-offset-1">
     <h4>发布原创</h4>
-    <%= form_for @article,url: articles_path do |f|%>
-      <%qiniu_token=generate_qiniu_upload_token %>
-      <%= hidden_field_tag :token, qiniu_token%>
-
-      <div class="form-group">
-        <%= f.label :title, "标题"%>
-        <%= f.text_field :title,class: "form-control"%>
-        <div class="error">
-          <%= @article.errors[:title].join(",")%>
-        </div>
-      </div>
-      <div class="form-group">
-        <%= f.label :content,"内容"%>
-        <%= f.text_area :content,class: "form-control article_content"%>
-        <div class="error">
-          <%= @article.errors[:content].join(",")%>
-        </div>
-      </div>
-      <div class="form-group">
-        <%= f.submit "保存"%>
-      </div>
-    <%end%>
+    <%= render "form"%>
   </div>
 </div>
 
 
-<script type="text/javascript">
-  
-$(function() {
-  var editor;
-  token = $("input[name=token]").val();
-
-  return editor = new Simditor({
-    textarea: $('.article_content'),
-    fileKey: 'file',
-    upload: {
-      url: 'http://upload.qiniu.com',
-      params: {"token": token},
-      fileKey: 'file',
-      connectionCount: 3,
-      leaveConfirm: 'Uploading is in progress, are you sure to leave this page?'
-    },
-    toolbar: ['title','strikethrough','fontScale','bold', 'italic', 'color', '|', 'ol', 'ul', '|', 'link', 'image', '|', 'indent', 'outdent', '|', 'hr',  'alignment', 'table']
-  });
-});
-</script>
