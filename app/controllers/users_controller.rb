@@ -29,6 +29,7 @@ class UsersController < ApplicationController
         flash[:info] = " 请登录到邮箱激活帐户"
         redirect_to root_url
       else
+        @user.profile.build
         log_in(@user)
         Sms.clear_limit(mobile)
         clear_verify_data

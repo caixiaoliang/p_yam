@@ -38,7 +38,7 @@
 
 
 
-<div class="modal" id="album_modal">
+<div class="modal" id="avatar_modal">
   <div class="modal-dialog">
     <div class="modal-content">
 
@@ -99,7 +99,7 @@
         $('#file').on('change', function(){
             filename=$(this).val(); 
 
-            $("#album_modal").modal();
+            $("#avatar_modal").modal();
             var reader = new FileReader();
             reader.onload = function(e) {
                 options.imgSrc = e.target.result;
@@ -153,11 +153,11 @@
           oReq.onreadystatechange = callback;
           oReq.open("POST", "http://upload.qiniu.com",true);
           oReq.send(fd);
-        }); 
+        });
         function callback(){
           if(oReq.readyState == 4) {
             if (oReq.status == 200) {
-              $("#album_modal").modal();
+              $("#avatar_modal").modal();
               location.reload();
               console.log(oReq.responseText);
             }
