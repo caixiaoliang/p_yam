@@ -6,15 +6,13 @@ module Sms
     raise "invalid phone number" unless mobile =~ Patterns.mobile
     raise "content can't be blank" if content.blank?
     raise "#{sms_service_provider} is not supplied"  unless [:tui3, :yunpian, :smsbao, :chanyoo, :emay, :luosimao].include?(sms_service_provider)
-    ChinaSMS.use(sms_service_provider, password: '5fcc0e93908fb5e99ae70349d20e4451')
+    ChinaSMS.use(sms_service_provider, password: Settings.yunpian.aaq) 
     ChinaSMS.to(mobile, content) unless Rails.env.development?
-    # ChinaSMS.use :smsbao, username: Setting.sms_bao.username, password: Setting.sms_bao.password
   end
 
 
   def send_verify_code(mobile, code, effective_time=10)
     content = "【雅马哈乐器音响】您的验证码是#{code}。如非本人操作，请忽略本短信"
-    # content = "【雅马哈乐器音响】您的验证码为，在#{effective_time}分钟内有效。"
     send_to(mobile,content)
     Rails.logger.info "sms code #{code} sent" if Rails.env.development?
     update_mobile_limit(mobile)

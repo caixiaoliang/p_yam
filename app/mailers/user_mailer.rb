@@ -3,7 +3,7 @@ class UserMailer < ActionMailer::Base
   # include SendGrid
   require 'rest_client'
 
-  
+  # 用设计模式包装一个适配各种邮件服务的gem
 
   def account_activation(user)
     @user = user
@@ -37,9 +37,12 @@ class UserMailer < ActionMailer::Base
     # puts response.headers
 
     email_body = render "account_activation"
-    uri =URI("http://api.sendcloud.net/apiv2/mail/send")
-    Net::HTTP.post_form(uri, {:apiUser => 'chengxiyue_test_Dv1H4N', 
-      :apiKey => 'Sp8BSU0DV8XM1gUJ',
+    # uri =URI("http://api.sendcloud.net/apiv2/mail/send")
+    uri = URI(Settings.sendcloud.uri)
+    api_key = Settings.sendcloud.api_key
+    api_user = Settings.sendcloud.api_user
+    Net::HTTP.post_form(uri, {:apiUser => api_user, 
+      :apiKey => api_key,
       :from => "yamahainfo@yamaha.com",
       :fromName => "Yamaha",
       :to => user.email,
@@ -52,9 +55,12 @@ class UserMailer < ActionMailer::Base
   def password_reset(user)
     @user = user
     email_body = render "password_reset"
-    uri = URI("http://api.sendcloud.net/apiv2/mail/send")
-    Net::HTTP.post_form(uri, {:apiUser => 'chengxiyue_test_Dv1H4N', 
-      :apiKey => 'Sp8BSU0DV8XM1gUJ',
+    # uri = URI("http://api.sendcloud.net/apiv2/mail/send")
+    uri = URI(Settings.sendcloud.uri)
+    api_key = Settings.sendcloud.api_key
+    api_user = Settings.sendcloud.api_user
+    Net::HTTP.post_form(uri, {:apiUser => api_user, 
+      :apiKey => api_key,
       :from => "yamahainfo@yamaha.com",
       :fromName => "Yamaha",
       :to => user.email,

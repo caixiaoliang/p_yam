@@ -39,7 +39,8 @@ module ApplicationHelper
 
 
   def generate_qiniu_upload_token
-    bucket = "chenxiyue"
+    # bucket = "chenxiyue"
+    bucket = Settings.qiniu.bucket
     put_policy=Qiniu::Auth::PutPolicy.new(bucket) #参数是七牛bucket名
     # put_policy.scope!("chenxiyue",key)
     callback_body={
@@ -47,7 +48,7 @@ module ApplicationHelper
       hash: '$(etag)',
       id:  '$(x:id)'
     }.to_json
-      # 构建回调策略，这里上传文件到七牛后， 七牛将文件名和文件大小回调给业务服务器.
+    # 构建回调策略，这里上传文件到七牛后， 七牛将文件名和文件大小回调给业务服务器.
     # callback_body = 'filename=$(fname)&filesize=$(fsize)' # 魔法变量的使用请参照 http://developer.qiniu.com/article/kodo/kodo-developer/up/vars.html#magicvar
     # put_policy.callback_url= upload_callback_users_url
     put_policy.callback_body= callback_body

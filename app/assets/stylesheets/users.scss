@@ -85,7 +85,7 @@ body{
   height: 132px;
 }
 /*头像上传模态框*/
-#album_modal .modal-dialog
+#avatar_modal .modal-dialog
 {
   width: 80%;
   min-width: 645px;
@@ -101,7 +101,7 @@ body{
     width: 400px;
     height: 260px;
     border:1px solid #aaa;
-    background: #fff;
+    background: #ffffff;
     overflow: hidden;
     background-repeat: no-repeat;
     cursor:move;
@@ -143,9 +143,9 @@ body{
   {
     margin-right: 10px;
   }
-/*#album_modal .modal-body{
+/*#avatar_modal .modal-body{
 height: 440px;
 }
-#album_modal{
+#avatar_modal{
   height: 600px;
 }*/

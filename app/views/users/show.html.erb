@@ -86,7 +86,7 @@
 </div>
 
 <script type="text/javascript">
-    $(window).load(function() {
+    $(function() {
       var filename;
       var oReq;
         var options =
@@ -106,7 +106,11 @@
                 cropper = $('.imageBox').cropbox(options);
             }
             reader.readAsDataURL(this.files[0]);
-            this.files = [];
+            debugger
+            var fileSize = this.files[0].size;
+            var fileName = this.value;
+            document.getElementById("file").value="";
+            // this.files = [] 只读的不能这样清空;
         })
 
         $('#btnCrop').on('click', function(){
@@ -168,6 +172,3 @@
         }
     });
 </script>
-
-
-

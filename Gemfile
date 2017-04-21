@@ -28,6 +28,7 @@ gem 'coffee-rails', '~> 4.1.0'
 # 七牛云
 gem 'qiniu','~>6.8.0'
 
+gem 'settingslogic'
 
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
