@@ -13,7 +13,7 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
-/config/application.yml
+#/config/application.yml
 /config/database.yml
 /config/wechat.yml
 # Ignore code coverage reports
