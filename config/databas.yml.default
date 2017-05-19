@@ -1,0 +1,41 @@
+base: &base
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  pool: 5
+  socket: /tmp/mysql.sock
+  username: root
+  password: 
+  database: yamaha_production
+
+development:
+  database: web
+  <<: *base
+test:
+  database: web
+  <<: *base
+
+production:
+  database: web
+  <<: *base
+
+  # base: &base
+  #         host: localhost
+  #         adapter: mysql2
+  #         encoding: utf8
+  #         reconnect: false
+  #         pool: 5
+  #         socket: #{release_path}/tmp/mysql.sock
+  #         username: #{fetch(:user)}
+  #         password: xiaoliang
+
+  #       development:
+  #         database: #{fetch(:application)}_dev
+  #         <<: *base
+  #       test:
+  #         database: #{fetch(:application)}_test
+  #         <<: *base
+
+  #       production:
+  #         database: #{fetch(:application)}_prod
+  #         <<: *base
