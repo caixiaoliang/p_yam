@@ -42,8 +42,11 @@ COPY . ./
 
 EXPOSE 3000
 
+RUN  rake  RAILS_ENV=production assets:precompile
 
-CMD bundle exec puma -C config/containers/puma.rb
+VOLUME ["$RAILS_ROOT/public"]
+
+CMD  puma -C config/containers/puma.rb
 #CMD ["rails", "server", "-b", "0.0.0.0"]
 
 

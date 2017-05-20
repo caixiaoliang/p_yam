@@ -1,4 +1,10 @@
 #!/usr/bin/env puma
+port ENV.fetch("PORT") { 3000 }
+# bind 'tcp://0.0.0.0:9292'
+environment 'production'
+on_restart do
+  puts 'On restart...'
+end
 
 # The directory to operate out of.
 #
@@ -74,9 +80,6 @@
 # bind 'tcp://0.0.0.0:9292'
 # bind 'unix:///var/run/puma.sock'
 
-app_root = File.expand_path("../..", __FILE__)
-bind "unix://#{app_root}/tmp/sockets/puma.sock"
-bind 'unix:///var/run/puma.sock?umask=0000'
 # bind 'ssl://127.0.0.1:9292?key=path_to_key&cert=path_to_cert'
 
 # Instead of "bind 'ssl://127.0.0.1:9292?key=path_to_key&cert=path_to_cert'" you
@@ -95,9 +98,6 @@ bind 'unix:///var/run/puma.sock?umask=0000'
 #
 # This can be called multiple times to add code each time.
 
- on_restart do
-   puts 'On restart...'
- end
 
 # Command to use to restart puma. This should be just how to
 # load puma itself (ie. 'ruby -Ilib bin/puma'), not the arguments
