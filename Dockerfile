@@ -31,7 +31,7 @@ WORKDIR $RAILS_ROOT
 # 备份 Gemfile 及 lock到容器的工作目录中
 COPY Gemfile Gemfile
 COPY Gemfile.lock Gemfile.lock
-
+RUN gem install rake
 RUN gem install bundler && bundle install --jobs 20 --retry 5
 
 
@@ -42,7 +42,7 @@ COPY . ./
 
 EXPOSE 3000
 
-RUN  rake  RAILS_ENV=production assets:precompile
+RUN rake  assets:precompile  RAILS_ENV=production
 
 VOLUME ["$RAILS_ROOT/public"]
 

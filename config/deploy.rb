@@ -9,6 +9,7 @@ set :application, "p_yam"
 set :repo_url,        'git@github.com:caixiaoliang/p_yam.git'
 set :application,     'p_yam'
 set :user,            'deploy'
+set :branch,        :docker_master
 
 set :pty,             true
 set :use_sudo,        false
@@ -18,7 +19,7 @@ set :deploy_to,       "/home/#{fetch(:user)}/docker-apps/#{fetch(:application)}"
 
 # set :ssh_options,     { forward_agent: true, user: fetch(:user), keys: %w(~/.ssh/id_rsa.pub) }
 set :ssh_options,     {user: fetch(:user)}
-# set :password, "xiaoliang"
+set :password, "xiao"
 
 set :keep_releases, 1
 
@@ -43,6 +44,4 @@ namespace :deploy do
     end
   end
 
-  after :publishing, 'deploy:build'
-  after :publishing, 'deploy:restart'
 end
