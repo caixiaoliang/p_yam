@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PYam</title>
+  <%= stylesheet_link_tag "application", params[:controller], :media => "all" %>
+  <%= javascript_include_tag "application", params[:controller] %>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+
+  <!-- <link rel="shortcut icon" href="favicon.ico"/> -->
+
+ <link rel="shortcut icon" href="favicon.ico"/>
+ <link rel="bookmark" href="favicon.ico"/>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<%flash.each do |message_type, message|%>
+  <div class="alert alert-<%=message_type%>"><%= message %></div>
+<%end%>
+  <%= render "shared/header_v1"%>
+
+<%= yield %>
+
+</body>
+</html>

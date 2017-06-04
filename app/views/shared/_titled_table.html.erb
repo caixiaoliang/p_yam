@@ -1,0 +1,26 @@
+<table class="title">
+  <%collection.in_groups_of(columns) do |rows|%>
+    <tr>
+      <% row.each do |item|%>
+        <td id="<%= dom_id()%>">
+          <div class="left">
+            <%= link_to thumbnail.call(item),link.call(item)%>
+          </div>
+          <div class="left">
+            <div class="title"><%= link_to title.call(item), link.call(item)%></div>
+            <div class="description"><%= link_to description.call(item)%></div>
+          </div>
+        </td>
+      <%end%>
+    </tr>
+  <%end%>  
+</table>
+
+<!-- 调用时 -->
+<!-- <%#= titled(cities,link: ->(city){city_ptah(city)})%> -->
+<!-- 当对象不同时 -->
+ <!-- <%#= titled(users,link: ->(user){user_path(user)},thumbnail: ->(user){user.avatar},title: ->(user){user.name},columns: 5)%> -->
+
+
+
+
