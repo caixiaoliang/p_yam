@@ -34,12 +34,9 @@ namespace :composing do
                 within current_path do
                     execute("docker-compose", "--project-name=#{fetch(:application)}_#{fetch(:stage)}",
                         "-f", "docker-compose.#{fetch(:stage)}.yml", "build", "app")
-                    # execute("docker-compose", "--project-name=#{fetch(:application)}_#{fetch(:stage)}",
-                    #     "-f", "docker-compose.#{fetch(:stage)}.yml",
-                    #     "up", "-d", "--no-deps", "app")
                     execute("docker-compose", "--project-name=#{fetch(:application)}_#{fetch(:stage)}",
                         "-f", "docker-compose.#{fetch(:stage)}.yml",
-                        "up", "--no-deps", "app")
+                        "up", "-d", "--no-deps", "app")
                 end
             end
         end
@@ -49,11 +46,13 @@ namespace :composing do
         desc "up redis "
         task :up do
             on roles(:app) do
-                execute("docker-compose",
-                "--project-name=#{fetch(:application)}_#{fetch(:stage)}",
-                "-f", "docker-compose.#{fetch(:stage)}.yml",
-                "up", "--no-deps", "redis"
-            )
+                within current_path do
+                    execute("docker-compose",
+                        "--project-name=#{fetch(:application)}_#{fetch(:stage)}",
+                        "-f", "docker-compose.#{fetch(:stage)}.yml",
+                        "up", "-d", "--no-deps", "redis"
+                    )
+                end
             end
         end
     end
@@ -62,11 +61,13 @@ namespace :composing do
         desc "up nginx"
         task :up do
             on roles(:app) do
-                execute("docker-compose",
-                "--project-name=#{fetch(:application)}_#{fetch(:stage)}",
-                "-f", "docker-compose.#{fetch(:stage)}.yml",
-                "up", "--no-deps", "web"
-            )
+                within current_path do
+                    execute("docker-compose",
+                        "--project-name=#{fetch(:application)}_#{fetch(:stage)}",
+                        "-f", "docker-compose.#{fetch(:stage)}.yml",
+                        "up", "--no-deps", "web"
+                    )
+                end
             end
         end
     end
@@ -85,7 +86,7 @@ namespace :composing do
               execute("docker-compose",
                 "--project-name=#{fetch(:application)}_#{fetch(:stage)}",
                 "-f", "docker-compose.#{fetch(:stage)}.yml",
-                "up", "--no-deps", "mysql"
+                "up", "-d", "--no-deps", "mysql"
               )
             end
           end
