@@ -34,6 +34,7 @@ COPY Gemfile.lock Gemfile.lock
 RUN gem install rake
 RUN gem install bundler && bundle install --jobs 20 --retry 5
 
+RUN mv config/databas.yml.sample config/database.yml
 
 COPY config/containers/puma.rb config/containers/puma.rb
 

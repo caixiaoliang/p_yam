@@ -48,11 +48,11 @@ namespace :composing do
         task :create do
             on roles(:app) do
                 within current_path do
-                    execute("docker-compose",
-                        "--project-name=#{fetch(:application)}_#{fetch(:stage)}",
-                        "-f", "docker-compose.#{fetch(:stage)}.yml",
-                        "run", "--rm", "web", "rake", "db:create"
-                    )
+                    # execute("docker-compose",
+                    #     "--project-name=#{fetch(:application)}_#{fetch(:stage)}",
+                    #     "-f", "docker-compose.#{fetch(:stage)}.yml",
+                    #     "run", "--rm", "web", "rake", "db:create"
+                    # )
                 end
             end
         end
@@ -61,11 +61,11 @@ namespace :composing do
         desc "migrate database"
             on roles(:app) do
                 within current_path do 
-                    execute("docker-compose",
-                        "--project-name=#{fetch(:application)}_#{fetch(:stage)}",
-                        "-f", "docker-compose.#{fetch(:stage)}.yml",
-                        "run", "--rm", "web", "rake", "db:migrate"
-                    )
+                    # execute("docker-compose",
+                    #     "--project-name=#{fetch(:application)}_#{fetch(:stage)}",
+                    #     "-f", "docker-compose.#{fetch(:stage)}.yml",
+                    #     "run", "--rm", "web", "rake", "db:migrate"
+                    # )
                 end
             end
         end

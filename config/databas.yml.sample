@@ -1,0 +1,20 @@
+base: &base
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  database: web
+  pool: 5
+  username: root
+  password: <%= ENV['MYSQL_ROOT_PASSWORD'] %>
+  host: mysql
+
+development:
+  database: web
+  <<: *base
+test:
+  database: web
+  <<: *base
+
+production:
+  database: web
+  <<: *base
