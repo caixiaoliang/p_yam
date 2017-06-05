@@ -15,7 +15,7 @@ services:
     ports:
       - "3306"
     env_file: 
-      - 'config/containers/.env'
+      - config/containers/.env
   redis:
     image: redis
   web:
