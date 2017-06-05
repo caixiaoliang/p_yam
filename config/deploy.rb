@@ -28,12 +28,15 @@ namespace :deploy do
   desc "Initialize application"
   task :initialize do
     invoke 'composing:build'
+    invoke 'composing:database:up'
     invoke 'composing:database:create'
     invoke 'composing:database:migrate'
+    invoke 'composing:nginx:up'
+    invoke 'composing:redis:up'
   end
 
   after :published, :restart do
-    invoke 'composing:restart:web'
+    invoke 'composing:restart:app'
     invoke 'composing:database:migrate'
   end
 
