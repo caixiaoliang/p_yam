@@ -10,13 +10,17 @@ services:
     links:
       - mysql
       - redis
+
   mysql:
     image: mysql
     ports:
       - "3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=xiaoliang
   redis:
     image: redis
   web:
+    restart: always
     build:
       context: .
       dockerfile: config/containers/Dockerfile-nginx
