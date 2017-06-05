@@ -36,7 +36,7 @@ namespace :composing do
                         "-f", "docker-compose.#{fetch(:stage)}.yml", "build", "web")
                     execute("docker-compose", "--project-name=#{fetch(:application)}_#{fetch(:stage)}",
                         "-f", "docker-compose.#{fetch(:stage)}.yml",
-                        "up", "-d", "--no-deps", "web")
+                        "restart", "-d", "--no-deps", "web")
                 end
             end
         end

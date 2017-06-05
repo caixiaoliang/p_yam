@@ -39,7 +39,8 @@ namespace :deploy do
 
   before :finished, :clear_containers do
     on roles(:app) do
-      execute("docker ps -a -q  -f status=running | xargs -r docker stop")
+      # 删除所有容器"docker rm $(docker ps -a -q)"
+      # execute "docker ps -a -q  -f status=running | xargs -r docker stop"
       execute "docker ps -a -q -f status=exited | xargs -r docker rm -v"
       execute "docker images -f dangling=true -q | xargs -r docker rmi -f"
     end

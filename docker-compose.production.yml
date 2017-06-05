@@ -18,6 +18,7 @@ services:
   redis:
     image: redis
   web:
+    restart: always
     build:
       context: .
       dockerfile: config/containers/Dockerfile-nginx
