@@ -10,14 +10,11 @@ services:
     links:
       - mysql
       - redis
-    env_file: 
-      - ./config/containers/.env
+
   mysql:
     image: mysql
     ports:
       - "3306"
-    env_file: 
-      - ./config/containers/.env
   redis:
     image: redis
   web:
