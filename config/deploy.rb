@@ -9,8 +9,8 @@ set :application, "p_yam"
 set :repo_url,        'git@github.com:caixiaoliang/p_yam.git'
 set :application,     'p_yam'
 set :user,            'deploy'
-set :branch,        :docker_master
 
+set :branch,        :docker_master
 set :pty,             true
 set :use_sudo,        false
 set :stage,           :production
