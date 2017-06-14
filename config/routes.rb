@@ -7,7 +7,6 @@ Rails.application.routes.draw do
   resources :sessions
   resources :users
   resources :password_resets
-  resources :articles
   resources :images
 
   resources :callbacks do
@@ -26,8 +25,11 @@ Rails.application.routes.draw do
   post 'login' => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
   get 'account_activation/:id',to: 'users#account_activation',as: :user_account_activation
-
   post 'users/send_verify_code' => 'users#send_verify_code'
+
+
+  resources :articles
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
