@@ -59,6 +59,8 @@ gem 'china_sms'
 # 验证码
 gem 'rucaptcha'
 
+gem "font-awesome-rails"
+
 # redis 
 gem 'redis'
 gem 'redis-store'

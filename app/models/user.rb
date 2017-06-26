@@ -56,7 +56,7 @@ class User < ActiveRecord::Base
   def check_verify_code
     effective_time = 10.minute
     hash = self.system_verify_data.symbolize_keys!
-    slef.errors.add(:verify_code,"验证码不合法") if verify_code_invalid?
+    slef.errors.add(:verify_code, "验证码不合法") if verify_code_invalid?
 
   end
 

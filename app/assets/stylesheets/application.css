@@ -10,13 +10,13 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- * "require_tree ."
- 
+
  *= require bootstrap.min
  *= require font-awesome
  *= require simditor
  *= require simditor-fullscreen
  *= require_self
+ *= require_tree .
  */
 
 

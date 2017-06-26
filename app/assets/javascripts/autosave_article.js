@@ -1,5 +1,5 @@
 // $(document).on('turbolinks:load', function() {
-    var autoSave;
+  var autoSave;
   if($(".article_form").attr("data-edit")=="true")
   {
       if($(".article_form").length > 0){

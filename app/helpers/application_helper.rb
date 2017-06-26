@@ -41,9 +41,9 @@ module ApplicationHelper
   def generate_qiniu_upload_token
     # bucket = "chenxiyue"
     bucket = Settings.qiniu.bucket
-    put_policy=Qiniu::Auth::PutPolicy.new(bucket) #参数是七牛bucket名
+    put_policy = Qiniu::Auth::PutPolicy.new(bucket,"aa",3600) #参数是七牛bucket名
     # put_policy.scope!("chenxiyue",key)
-    callback_body={
+    callback_body = {
       fname: '$(fname)',
       hash: '$(etag)',
       id:  '$(x:id)'

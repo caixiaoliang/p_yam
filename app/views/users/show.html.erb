@@ -64,7 +64,7 @@
         <div class="cropped" style="float:right"></div>
 
         <div class="action" style="clear:both">
-          <input type="button" class="btn btn-default" id="btnCrop" value="裁剪" style="float: right;"/>
+          <f type="button" class="btn btn-default" id="btnCrop" value="裁剪" style="float: right;"/>
           <i class="fa fa-2x fa-search-minus"  id="btnZoomOut" style="float: right;cursor: pointer;margin-right:20px;"></i>
           <i class="fa fa-2x fa-search-plus" id="btnZoomIn" style="float: right;cursor: pointer;margin-right:20px;"></i>
         </div>
@@ -106,7 +106,6 @@
                 cropper = $('.imageBox').cropbox(options);
             }
             reader.readAsDataURL(this.files[0]);
-            debugger
             var fileSize = this.files[0].size;
             var fileName = this.value;
             document.getElementById("file").value="";
@@ -133,7 +132,7 @@
 
         $(".js-upload").click(function(){
           console.log("uploading...")
-          var data =cropper.getDataURL();
+          var data = cropper.getDataURL();
           // dataURL 的格式为 “data:image/png;base64,****”,逗号之前都是一些说明性的文字，我们只需要逗号之后的就行了
           data = data.split(',')[1];
           data = window.atob(data);
@@ -146,8 +145,8 @@
           var blob = new Blob([ia], {type:"image/png"});
           var fd = new FormData();
 
-          var arr=filename.split('\\');//注split可以用字符或字符串分割 
-          var image_name=arr[arr.length-1];//这就是要取得的图片名称 
+          var arr = filename.split('\\');//注split可以用字符或字符串分割 
+          var image_name = arr[arr.length-1]; //这就是要取得的图片名称 
           token = $("input[name=token]").val();
           fd.append('file',blob,image_name);
           fd.append('token',token);

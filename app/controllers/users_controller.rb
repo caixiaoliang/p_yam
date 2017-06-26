@@ -21,7 +21,7 @@ class UsersController < ApplicationController
       @user.email = user_params[:account].to_s
       @user.create_activation_digest
     end
-    @user.profile.build
+    @user.create_profile
 
     if valid_rucaptcha && @user.save
       if account  == 'email'
@@ -36,7 +36,7 @@ class UsersController < ApplicationController
         redirect_to @user
       end
     else
-      flash.now[:message]= "验证码错误"  if !valid_rucaptcha
+      flash.now[:danger]= "验证码错误"  if !valid_rucaptcha
       render "new"
     end
   end
