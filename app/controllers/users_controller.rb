@@ -37,7 +37,7 @@ class UsersController < ApplicationController
       end
     else
       # if !valid_rucaptcha
-      flash.now[:danger]= @user.errors.first  
+      flash.now[:danger] =  @user.errors.full_messages.first.to_s if @user.errors.full_messages.any?
       render "new"
     end
   end
