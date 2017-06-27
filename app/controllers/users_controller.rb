@@ -36,7 +36,8 @@ class UsersController < ApplicationController
         redirect_to @user
       end
     else
-      flash.now[:danger]= "验证码错误"  if !valid_rucaptcha
+      # if !valid_rucaptcha
+      flash.now[:danger]= @user.errors.first  
       render "new"
     end
   end
