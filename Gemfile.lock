@@ -106,7 +106,7 @@ GEM
     mini_portile2 (2.1.0)
     minitest (5.10.1)
     multi_json (1.12.1)
-    mysql2 (0.5.2)
+    mysql2 (0.4.10)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (4.1.0)
@@ -241,7 +241,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   jquery-turbolinks
-  mysql2
+  mysql2 (~> 0.4.0)
   pry
   pry-nav
   puma
