@@ -1,4 +1,4 @@
-source 'https://ruby.taobao.org/'
+source 'https://gems.ruby-china.com'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -10,10 +10,7 @@ gem 'mysql2'
 gem 'i18n'
 
 # 微信开放平台
-gem "omniauth-wechat-oauth2", git: 'git@github.com:yangsr/omniauth-wechat-oauth2.git'
-gem 'responders'
-#微信公众平台 
-# gem 'omniauth-wechat-oauth2'
+
 # Use SCSS for stylesheets
 gem 'sass'
 gem 'sass-rails', '~> 5.0'
